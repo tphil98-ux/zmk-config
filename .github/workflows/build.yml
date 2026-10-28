@@ -1,0 +1,7 @@
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  build:
+    uses: zmkfirmware/zmk/.github/workflows/user-build-preferences.yml@main
+    with:
+      build-matrix-path: "build.yaml"
