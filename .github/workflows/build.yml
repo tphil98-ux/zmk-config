@@ -47,8 +47,8 @@ jobs:
       - name: Rename artifact
         run: |
           mkdir -p build/artifacts
-          if [ -f zmk/app/build/zephyr/zmk.uf2 ]; then
-            cp zmk/app/build/zephyr/zmk.uf2 "build/artifacts/${{ matrix.shield }}.uf2"
+          if [ -f build/zephyr/zmk.uf2 ]; then
+            cp build/zephyr/zmk.uf2 "build/artifacts/${{ matrix.shield }}.uf2"
           fi
 
       - name: Upload artifact
