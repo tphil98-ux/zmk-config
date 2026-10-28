@@ -1,8 +1,7 @@
 ---
 include:
-  # TODO: replace board with your actual controller (e.g. nice_nano_v2, seeeduino_xiao_ble)
-  # TODO: replace shield with your actual 36-key Corne shield name
-  - board: nice_nano_v2
+  # TODO: replace shield with your actual 36-key Corne shield name once confirmed
+  - board: nice_nano
     shield: corne_left
-  - board: nice_nano_v2
+  - board: nice_nano
     shield: corne_right
