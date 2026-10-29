@@ -4,9 +4,10 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
+    name: Build ${{ matrix.shield }}
     runs-on: ubuntu-latest
     container:
-      image: zmkfirmware/zmk-build-arm:3.5
+      image: zmkfirmware/zmk-build-arm:stable
     strategy:
       fail-fast: false
       matrix:
@@ -20,39 +21,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache west modules
-        uses: actions/cache@v4
-        with:
-          path: |
-            modules/
-            tools/
-            zephyr/
-            bootloader/
-            zmk/
-          key: ${{ runner.os }}-west-${{ hashFiles('config/west.yml') }}
-          restore-keys: ${{ runner.os }}-west-
-
-      - name: West Init
-        run: west init -l config
-
-      - name: West Update
-        run: west update
-
-      - name: West Zephyr export
-        run: west zephyr-export
-
-      - name: Build (${{ matrix.board }} - ${{ matrix.shield }})
-        run: west build -s zmk/app -b ${{ matrix.board }} -- -DSHIELD=${{ matrix.shield }} -DZMK_CONFIG="${GITHUB_WORKSPACE}/config"
-
-      - name: Rename artifact
+      - name: Init west workspace
+        shell: bash
         run: |
-          mkdir -p build/artifacts
-          if [ -f build/zephyr/zmk.uf2 ]; then
-            cp build/zephyr/zmk.uf2 "build/artifacts/${{ matrix.shield }}.uf2"
-          fi
+          set -eux
+          rm -rf /tmp/zmk-config
+          mkdir -p /tmp/zmk-config
+          cp -R "${GITHUB_WORKSPACE}/config" /tmp/zmk-config/config
+          cd /tmp/zmk-config
+          west init -l config
+          west update --fetch-opt=--filter=tree:0
+          west zephyr-export
+
+      - name: Build ${{ matrix.shield }}
+        shell: bash
+        working-directory: /tmp/zmk-config
+        run: |
+          set -eux
+          west build -s zmk/app -d /tmp/build -b "${{ matrix.board }}" \
+            -- -DZMK_CONFIG=/tmp/zmk-config/config \
+               -DSHIELD="${{ matrix.shield }}"
+
+      - name: Collect artifact
+        shell: bash
+        run: |
+          set -eux
+          mkdir -p "${GITHUB_WORKSPACE}/artifacts"
+          cp /tmp/build/zephyr/zmk.uf2 "${GITHUB_WORKSPACE}/artifacts/${{ matrix.shield }}.uf2"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.shield }}
-          path: build/artifacts
+          path: ${{ github.workspace }}/artifacts/
+          if-no-files-found: error
