@@ -76,7 +76,7 @@
         default_layer {
             // Layer 0 — Base
             // ╭──────┬──────┬──────┬──────┬──────┬──────╮   ╭──────┬──────┬──────┬──────┬──────┬──────╮
-            // │      │      │   Q  │   W  │   D  │      │   │   U  │   I  │   O  │   R  │      │      │
+            // │      │   Q  │   W  │   D  │      │      │   │      │   U  │   I  │   O  │   R  │      │
             // ├──────┼──────┼──────┼──────┼──────┼──────┤   ├──────┼──────┼──────┼──────┼──────┼──────┤
             // │      │   A  │   P  │   S  │   C  │   G  │   │   H  │   J  │   K  │   L  │   N  │      │
             // ├──────┼──────┼──────┼──────┼──────┼──────┤   ├──────┼──────┼──────┼──────┼──────┼──────┤
@@ -85,10 +85,10 @@
             //                      │  SL2 │ os⌘  │  BSP │   │  SPC │ os⌥  │ os⌃  │
             //                      ╰──────┴──────┴──────╯   ╰──────┴──────┴──────╯
             bindings = <
-                &trans  &trans   &kp Q    &kp W    &kp D    &trans        &kp U    &kp I    &kp O    &kp R    &trans   &trans
+                &trans  &kp Q    &kp W    &kp D    &trans   &trans        &trans   &kp U    &kp I    &kp O    &kp R    &trans
                 &trans  &kp A    &kp P    &kp S    &kp C    &kp G         &kp H    &kp J    &kp K    &kp L    &kp N    &trans
                 &trans  &kp Z    &kp X    &kp F    &kp T    &kp V         &kp M    &kp B    &kp E    &kp Y    &trans   &trans
-                                          &sl 2    &sk LGUI &kp BSPC      &kp SPACE &sk LALT &sk LCTRL
+                                          &sl 2    &sk LGUI &kp BSPC      &sk LCTRL &kp SPACE &sk LALT
             >;
         };
 
