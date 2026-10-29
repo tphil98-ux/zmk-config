@@ -48,11 +48,11 @@
             bindings = <&sk LSHFT>;
         };
 
-        // SL2(36) + sk(LCTL)(41) = sticky layer 1 (num/sym)
+        // SL2(36) + sk(LALT)(41) = momentary layer 1 (num/sym)
         combo_num {
             timeout-ms = <50>;
             key-positions = <36 41>;
-            bindings = <&sl 1>;
+            bindings = <&mo 1>;
         };
 
         // J(19) + K(20) + L(21) = one-shot Shift
