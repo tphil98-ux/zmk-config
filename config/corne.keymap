@@ -125,7 +125,7 @@
             bindings = <
                 &trans  &trans   &kp LBRC &kp RBRC &trans   &trans        &trans    &kp MINUS &kp SEMI  &kp COLON &kp DLLR  &trans
                 &trans  &kp LPAR &kp RPAR &kp LBKT &kp RBKT &kp SLASH     &kp LEFT  &kp DOWN  &kp UP    &kp RIGHT &kp UNDER &trans
-                &trans  &trans   &kp LT   &sk LALT &kp GT   &kp BSLH      &kp ENTER &kp COMMA &kp DOT   &kp GRAVE &kp SQT   &trans
+                &trans  &trans   &kp LT   &sk LALT &kp GT   &kp BSLH      &kp SQT   &kp ENTER &kp COMMA &kp DOT   &kp GRAVE &trans
                                           &to 0    &trans   &trans         &kp DQT   &trans    &kp TAB
             >;
         };
