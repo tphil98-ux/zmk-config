@@ -20,7 +20,8 @@
  * Layer colour indicators: each layer switch also sets the underglow colour.
  * Base is a faint purple ("normal"); a bright colour means you're parked on
  * another layer. Hue 0-360, sat/brightness 0-100. RGB commands are global,
- * so both halves change together.
+ * so both halves change together. RGB_EFS_CMD 0 forces the Solid effect
+ * so a saved animated effect (e.g. Swirl) cannot override the colours.
  */
 #define COLOR_BASE  RGB_COLOR_HSB(270, 100, 10)  // faint purple
 #define COLOR_MEDIA RGB_COLOR_HSB(30, 100, 40)   // orange
@@ -34,7 +35,7 @@
         #binding-cells = <0>;                                         \
         wait-ms = <0>;                                                \
         tap-ms = <10>;                                                \
-        bindings = <&macro_tap &to layer &rgb_ug color>;              \
+        bindings = <&macro_tap &to layer &rgb_ug RGB_EFS_CMD 0 &rgb_ug color>;    \
     };
 
 / {
@@ -182,7 +183,7 @@
         rgb_layer {
             // Layer 5 — RGB
             bindings = <
-                &none   &none   &none   &none   &none   &none         &none    &none           &rgb_ug RGB_TOG &rgb_ug RGB_EFF  &none  &none
+                &none   &none   &none   &none   &none   &none         &none    &none           &rgb_ug RGB_TOG &none            &none  &none
                 &none   &none   &none   &none   &none   &none         &none    &rgb_ug RGB_BRD &rgb_ug RGB_BRI &none  &none  &none
                 &none   &none   &none   &none   &none   &none         &rgb_ug RGB_COLOR_HSB(0,100,33) &none &none &none &none &none
                                         &to_base   &to_base  &trans        &trans   &none           &to_media
