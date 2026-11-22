@@ -48,10 +48,10 @@
             bindings = <&sk LSHFT>;
         };
 
-        // Bspc(36) + sk(LALT)(41) = momentary layer 2 (num/sym)
+        // SL1(37) + SPC(40) = momentary layer 2 (num/sym)
         combo_num {
             timeout-ms = <50>;
-            key-positions = <36 41>;
+            key-positions = <37 40>;
             bindings = <&mo 2>;
         };
 
