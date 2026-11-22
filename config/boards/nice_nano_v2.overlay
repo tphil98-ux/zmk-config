@@ -1,6 +1,3 @@
-// The Corne shield (boards/nice_nano_v2.overlay) already defines led_strip
-// on spi3 (MOSI=P0.06) and sets zmk,underglow. We only override chain-length.
-
-&led_strip {
-    chain-length = <27>;
-};
+// Corne shield's boards/nice_nano_v2.overlay already defines led_strip
+// on spi3 (MOSI=P0.06) with chain-length=10 and sets zmk,underglow.
+// No overrides needed here.
