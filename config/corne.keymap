@@ -16,7 +16,36 @@
 #include <dt-bindings/zmk/rgb.h>
 #include <dt-bindings/zmk/mouse.h>
 
+/*
+ * Layer colour indicators: each layer switch also sets the underglow colour.
+ * Base is a faint purple ("normal"); a bright colour means you're parked on
+ * another layer. Hue 0-360, sat/brightness 0-100. RGB commands are global,
+ * so both halves change together.
+ */
+#define COLOR_BASE  RGB_COLOR_HSB(270, 100, 10)  // faint purple
+#define COLOR_MEDIA RGB_COLOR_HSB(30, 100, 40)   // orange
+#define COLOR_RGB   RGB_COLOR_HSB(0, 0, 40)      // white
+#define COLOR_HEX   RGB_COLOR_HSB(175, 100, 40)  // teal
+#define COLOR_FN    RGB_COLOR_HSB(220, 100, 40)  // blue
+
+#define LAYER_COLOR_MACRO(name, layer, color)                         \
+    name: name {                                                      \
+        compatible = "zmk,behavior-macro";                            \
+        #binding-cells = <0>;                                         \
+        wait-ms = <0>;                                                \
+        tap-ms = <10>;                                                \
+        bindings = <&macro_tap &to layer &rgb_ug color>;              \
+    };
+
 / {
+    macros {
+        LAYER_COLOR_MACRO(to_base,  0, COLOR_BASE)
+        LAYER_COLOR_MACRO(to_media, 4, COLOR_MEDIA)
+        LAYER_COLOR_MACRO(to_rgb,   5, COLOR_RGB)
+        LAYER_COLOR_MACRO(to_hex,   6, COLOR_HEX)
+        LAYER_COLOR_MACRO(to_fn,    7, COLOR_FN)
+    };
+
     combos {
         compatible = "zmk,combos";
 
@@ -38,7 +67,7 @@
         combo_media {
             timeout-ms = <50>;
             key-positions = <19 21>;
-            bindings = <&to 4>;
+            bindings = <&to_media>;
         };
 
         // Bspc(38) + Space(39) = one-shot Shift
@@ -66,7 +95,7 @@
         combo_fn {
             timeout-ms = <75>;
             key-positions = <31 33>;
-            bindings = <&to 7>;
+            bindings = <&to_fn>;
         };
     };
 
@@ -107,7 +136,7 @@
                 &trans  &trans   &kp LBRC &kp RBRC &trans   &trans        &trans    &kp MINUS &kp SEMI  &kp COLON &kp DLLR  &trans
                 &trans  &kp LPAR &kp RPAR &kp LBKT &kp RBKT &kp SLASH     &kp LEFT  &kp DOWN  &kp UP    &kp RIGHT &kp UNDER &trans
                 &trans  &trans   &kp LT   &sk LALT &kp GT   &kp BSLH      &kp SQT   &kp ENTER &kp COMMA &kp DOT   &kp GRAVE &trans
-                                          &to 0    &trans   &trans         &kp DQT   &kp BSPC  &kp TAB
+                                          &to_base    &trans   &trans         &kp DQT   &kp BSPC  &kp TAB
             >;
         };
 
@@ -126,7 +155,7 @@
                 &trans  &trans    &trans   &trans    &trans   &trans        &trans    &kp N7   &kp N8   &kp N9  &kp SLASH &trans
                 &trans  &kp LPAR  &kp RPAR &kp PRCNT &kp CARET &kp HASH    &kp EQUAL &kp N4   &kp N5   &kp N6  &kp STAR  &trans
                 &trans  &kp TILDE &kp AMPS &kp AT    &kp EXCL &kp QMARK    &kp N0    &kp N1   &kp N2   &kp N3  &kp LT    &trans
-                                           &to 0     &to 6    &trans        &kp ENTER &kp MINUS &kp PLUS
+                                           &to_base     &to_hex    &trans        &kp ENTER &kp MINUS &kp PLUS
             >;
         };
 
@@ -136,7 +165,7 @@
                 &trans  &trans  &none   &none   &none   &trans        &trans         &none          &none        &none          &none   &trans
                 &trans  &none   &none   &none   &none   &none         &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_UP &mmv MOVE_RIGHT &none   &trans
                 &trans  &trans  &none   &none   &none   &trans        &mkp LCLK      &mkp RCLK      &none        &trans         &trans  &trans
-                                        &sk LCTRL &trans &trans        &to 0          &trans         &mkp LCLK
+                                        &sk LCTRL &trans &trans        &to_base          &trans         &mkp LCLK
             >;
         };
 
@@ -146,7 +175,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans        &trans       &kp C_BRI_DN &kp C_BRI_UP &trans      &trans      &trans
                 &trans  &trans  &trans  &trans  &trans  &trans        &kp C_MUTE   &kp C_VOL_DN &kp C_VOL_UP &trans      &trans      &trans
                 &trans  &trans  &trans  &trans  &trans  &trans        &kp C_PREV   &kp C_PP     &kp C_NEXT   &kp C_STOP  &trans      &trans
-                                        &to 0   &tog 4  &trans        &trans       &none        &to 5
+                                        &to_base   &to_base  &trans        &trans       &none        &to_rgb
             >;
         };
 
@@ -156,7 +185,7 @@
                 &none   &none   &none   &none   &none   &none         &none    &none           &rgb_ug RGB_TOG &none  &none  &none
                 &none   &none   &none   &none   &none   &none         &none    &rgb_ug RGB_BRD &rgb_ug RGB_BRI &none  &none  &none
                 &none   &none   &none   &none   &none   &none         &rgb_ug RGB_COLOR_HSB(0,100,33) &none &none &none &none &none
-                                        &to 0   &tog 5  &trans        &trans   &none           &to 4
+                                        &to_base   &to_base  &trans        &trans   &none           &to_media
             >;
         };
 
@@ -166,7 +195,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans        &kp KP_N0 &kp KP_N1 &kp KP_N2 &kp KP_N3 &kp D  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans        &kp A     &kp KP_N4 &kp KP_N5 &kp KP_N6 &kp E  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans        &kp KP_N7 &kp KP_N8 &kp KP_N9 &kp C     &kp F  &trans
-                                        &to 0   &sk LALT &trans       &trans    &trans    &trans
+                                        &to_base   &sk LALT &trans       &trans    &trans    &trans
             >;
         };
 
@@ -176,7 +205,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans        &kp F1  &kp F2  &kp F3  &kp F10  &trans   &trans
                 &trans  &trans  &trans  &trans  &trans  &trans        &kp F4  &kp F5  &kp F6  &kp F11  &trans   &trans
                 &trans  &trans  &trans  &trans  &trans  &trans        &kp F7  &kp F8  &kp F9  &kp F12  &kp F13  &trans
-                                        &to 0   &trans  &trans        &trans  &trans  &trans
+                                        &to_base   &trans  &trans        &trans  &trans  &trans
             >;
         };
     };
