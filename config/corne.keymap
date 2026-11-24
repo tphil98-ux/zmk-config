@@ -15,6 +15,8 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/rgb.h>
 #include <dt-bindings/zmk/mouse.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
 
 /*
  * Layer colour indicators: each layer switch also sets the underglow colour.
@@ -205,10 +207,10 @@
         };
 
         rgb_layer {
-            // Layer 5 — RGB
+            // Layer 5 — RGB + Bluetooth (left: BT profiles 0-4 on top row, BT_CLR + USB/BLE toggle on home row)
             bindings = <
-                &none   &none   &none   &none   &none   &none         &none    &none           &rgb_ug RGB_TOG &none            &none  &none
-                &none   &none   &none   &none   &none   &none         &none    &rgb_ug RGB_BRD &rgb_ug RGB_BRI &none  &none  &none
+                &none   &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4   &none    &none           &rgb_ug RGB_TOG &none            &none  &none
+                &none   &bt BT_CLR  &out OUT_TOG &none &none &none          &none    &rgb_ug RGB_BRD &rgb_ug RGB_BRI &none  &none  &none
                 &none   &none   &none   &none   &none   &none         &rgb_ug RGB_COLOR_HSB(0,100,33) &none &none &none &none &none
                                         &to_base   &to_base  &trans        &trans   &none           &to_media
             >;
